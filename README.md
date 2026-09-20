@@ -1,6 +1,6 @@
 # Loan Approval Prediction Dashboard
 
-A Streamlit decision-support dashboard for exploring loan approval patterns and evaluating a Random Forest classification model trained on 614 historical applicant records.
+A Streamlit dashboard to explore loan approval patterns and test a Random Forest model on 614 applicant records.
 
 [![Python](https://img.shields.io/badge/Python-3.14-3776AB?style=flat-square&logo=python&logoColor=white)](#)
 [![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-1.5.0-F7931E?style=flat-square&logo=scikit-learn&logoColor=white)](#)
@@ -24,12 +24,12 @@ A Streamlit decision-support dashboard for exploring loan approval patterns and 
 
 ## 📌 Business Use Case
 
-In retail lending, credit analysts balance expanding loan volume with keeping default rates low. This prototype assists an analyst to:
+In lending, analysts need to grow loan approvals without increasing default risk. This prototype helps analyst to:
 - Inspect historical relationships between applicant finances, requested loan amounts, and credit history.
 - Evaluate model predictions alongside estimated debt-to-income (DTI) metrics.
 - Review demographic approval rates prior to considering automated decision support.
 
-> **Scope & Limitations:** This is an educational prototype trained on 614 records from a public Kaggle dataset. It is designed to assist human review, not serve as an autonomous credit-scoring system.
+> **Scope & Limitations:** This is an educational prototype trained on 614 records from a public Kaggle dataset. This is meant to support human review, not replace human credit decisions.
 
 ---
 
@@ -59,8 +59,8 @@ In retail lending, credit analysts balance expanding loan volume with keeping de
 
 ## ⚖️ Fairness & Ethical Considerations (UN SDG 10)
 
-This project addresses **UN SDG 10 (Reduced Inequalities)** by testing for demographic parity:
-- **Feature Exclusion:** `Gender` is excluded from the model feature set so decisions are driven by credit history and debt-servicing capacity.
+This project looks at **UN SDG 10** by checking demographic parity:
+- **Feature Exclusion:** `Gender` is excluded from the model. The model uses credit history and debt-to-income capacity instead.
 - **Disparate Impact Screening:** Historical records show an approval rate of 66.9% for female applicants and 69.3% for male applicants, yielding a ratio of **0.966** (satisfying the regulatory Four-Fifths screening threshold of $\ge 0.80$).
 - **Limitation:** Omission of a sensitive attribute does not guarantee complete fairness, as correlated proxy variables may still exist. A production audit would require subgroup error-rate evaluation.
 
