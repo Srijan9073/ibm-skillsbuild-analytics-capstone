@@ -9,7 +9,7 @@ An end-to-end data analytics and predictive underwriting decision engine develop
 
 ---
 
-## 📌 Executive Summary
+## 📌 Summary
 Traditional retail credit underwriting relies on manual reviews that introduce latency, human inconsistency, and high rejection rates for unbanked borrowers. This project delivers an automated, audit-cleared credit scoring pipeline that balances credit portfolio expansion against Non-Performing Asset (NPA) risk.
 
 ### 🌐 UN Sustainable Development Goals (UN SDGs) Alignment
