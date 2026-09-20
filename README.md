@@ -2,9 +2,9 @@
 
 A Streamlit dashboard to explore loan approval patterns and test a Random Forest model on 614 applicant records.
 
-[![Python](https://img.shields.io/badge/Python-3.14-3776AB?style=flat-square&logo=python&logoColor=white)](#)
-[![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-1.5.0-F7931E?style=flat-square&logo=scikit-learn&logoColor=white)](#)
-[![Streamlit](https://img.shields.io/badge/Streamlit-1.36.0-FF4B4B?style=flat-square&logo=streamlit&logoColor=white)](#)
+[![Python](https://img.shields.io/badge/Python-3.14-3776AB?style=flat-square&logo=python&logoColor=white)]
+[![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-1.5.0-F7931E?style=flat-square&logo=scikit-learn&logoColor=white)]
+[![Streamlit](https://img.shields.io/badge/Streamlit-1.36.0-FF4B4B?style=flat-square&logo=streamlit&logoColor=white)]
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
 > **Key Results at a Glance:**
@@ -41,7 +41,7 @@ In lending, analysts need to grow loan approvals without increasing default risk
 | **Majority-Class Baseline** | **68.7%** | Naive "always approve" strategy |
 | **Net Improvement** | **+6.0 percentage points** | Empirical model lift over naive baseline |
 | **Holdout Test Accuracy** | **81.3%** | Evaluated on 123 unseen test records |
-| **Precision (Approval Class)**| **87.8%** | 72 of 82 predicted approvals were correct |
+| **Precision (Approval Class)** | **87.8%** | 72 of 82 predicted approvals were correct |
 | **Recall (Sensitivity)** | **84.7%** | Correctly identified 72 of 85 approved applicants |
 | **ROC-AUC Score** | **0.85** | Strong class separability on test cohort |
 | **Disparate Impact Ratio** | **0.966** | Historical female/male approval-rate ratio |
@@ -84,7 +84,6 @@ This project looks at **UN SDG 10** by checking demographic parity:
 ### 1. Reproduce Validation Metrics
 ```bash
 python scripts/verify_metrics.py
-
 ```
 ### 2. Launch the Streamlit Dashboard
 ```bash
