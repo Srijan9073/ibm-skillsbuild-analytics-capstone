@@ -41,12 +41,12 @@ Traditional retail credit underwriting relies on manual reviews that introduce l
 ---
 
 ## 📂 Repository Contents
-- `app.py`: Single-file pipeline and interactive Streamlit underwriting simulator.
-- `project_report.pdf`: 5-page publication-grade LaTeX report with all 7 UI figures.
-- `train_loan_data.csv`: Source benchmark dataset.
-- `requirements.txt` & `lockfile.txt`: Pinned, project-scoped environment dependencies.
-- `output.txt`: Raw execution log from `verify_metrics.py`.
-- `runtime.txt`: Specified Python 3.14 runtime.
+- [`app.py`](./app.py): Single-file leakage-free pipeline and interactive Streamlit underwriting simulator.
+- [`project_report.pdf`](./project_report.pdf): 5-page publication-grade LaTeX report with all 7 UI figures.
+- [`train_loan_data.csv`](./train_loan_data.csv): Source benchmark dataset.
+- [`requirements.txt`](./requirements.txt) & [`lockfile.txt`](./lockfile.txt): Pinned, project-scoped environment dependencies.
+- [`output.txt`](./output.txt): Raw execution log from `verify_metrics.py`.
+- [`runtime.txt`](./runtime.txt): Specified Python 3.14 runtime.
 
 ---
 
