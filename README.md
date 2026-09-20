@@ -28,13 +28,13 @@ Traditional retail credit underwriting relies on manual reviews that introduce l
 ## 🛠️ Architecture & Empirical Benchmarks
 - **Data Engineering:** Integrated domain indicators (`Total_Income`, `EMI_Estimate`, `Debt_To_Income`).
 - **Leakage-Free Pipeline:** Preprocessing and `SimpleImputer(strategy='median')` are wrapped in a Scikit-Learn `Pipeline` fitted strictly on training folds.
-- **Model:** Regularized ensemble Random Forest Classifier ($n=120$, $\text{max\_depth}=5$, balanced class weights).
+- **Model:** Regularized ensemble Random Forest Classifier (120 estimators, max depth = 5, balanced class weights).
 
 ### 📈 Verified Performance Metrics (Tested on Python 3.14)
 - **5-Fold Stratified Cross-Validation:** **74.7% ± 5.1%** (+6.0% lift over 68.7% naive baseline)
-- **Holdout Validation Accuracy:** **81.3%** ($100 / 123$)
-- **Precision (Approval Class):** **87.8%** ($72 / 82$)
-- **Recall (Sensitivity):** **84.7%** ($72 / 85$, minimizing false rejections)
+- **Holdout Validation Accuracy:** **81.3%** (100 / 123)
+- **Precision (Approval Class):** **87.8%** (72 / 82)
+- **Recall (Sensitivity):** **84.7%** (72 / 85, minimizing false rejections)
 - **ROC-AUC Score:** **0.85**
 - **Disparate Impact Ratio:** **0.966** (No demographic bias)
 
@@ -46,6 +46,7 @@ Traditional retail credit underwriting relies on manual reviews that introduce l
 - `train_loan_data.csv`: Source benchmark dataset.
 - `requirements.txt` & `lockfile.txt`: Pinned, project-scoped environment dependencies.
 - `output.txt`: Raw execution log from `verify_metrics.py`.
+- `runtime.txt`: Specified Python 3.14 runtime.
 
 ---
 
@@ -59,8 +60,4 @@ cd ibm-skillsbuild-analytics-capstone
 pip install -r requirements.txt
 
 # 3. Launch the dashboard
-streamlit run app.py# Credit Risk Assessment & Automated Loan Underwriting Engine
-pip install -r requirements.txt
-
-# 3. Launch the dashboard
-python -m streamlit run app.py
+streamlit run app.py
