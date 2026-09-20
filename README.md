@@ -101,3 +101,6 @@ streamlit run app.py
 - **Institution:** Cooch Behar Government Engineering College (CGEC)
 - **Program:** AICTE–BharatCares–IBM SkillsBuild Data Analytics with AI Virtual Internship
 - **LinkedIn:** [linkedin.com/in/srijandas2099](https://www.linkedin.com/in/srijandas2099/)
+
+## 📄 License
+This project is released under the MIT License. The dataset remains subject to original Kaggle source terms.
