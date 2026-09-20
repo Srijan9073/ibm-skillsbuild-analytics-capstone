@@ -1,40 +1,63 @@
-# Credit Risk Assessment & Loan Approval Prediction
+# Loan Approval Prediction Dashboard
+
+A Streamlit decision-support dashboard for exploring loan approval patterns and evaluating a Random Forest classification model trained on 614 historical applicant records.
+
+> **Key Results at a Glance:**
+> - **81.3%** holdout accuracy on 123 test applications (100 of 123 correctly classified)
+> - **74.7% ± 5.1%** accuracy across 5-fold stratified cross-validation
+> - **+6.0 percentage points** improvement over the naive majority-class baseline (68.7%)
+> - **0.85 ROC-AUC score** demonstrating class discrimination
+> - **0.966** historical female-to-male approval-rate ratio (`Gender` omitted from training features)
+>
+> [Read the full project report (PDF)](./reports/project_report.pdf) · [View verification script](./scripts/verify_metrics.py)
+
+---
 
 ![Streamlit dashboard screenshot](reports/dashboard-screenshot.png)
 
-A Streamlit prototype that predicts loan approval using applicant income, loan details, credit history, education, marital status, and property area.
+---
 
-Built as the final project for the **AICTE–IBM SkillsBuild Data Analytics with AI Virtual Internship (2026)**.
+## 📌 Business Use Case
 
-## 📊 Results at a Glance
+In retail lending, credit analysts balance expanding loan volume with keeping default rates low. This prototype assists an analyst to:
+- Inspect historical relationships between applicant finances, requested loan amounts, and credit history.
+- Evaluate model predictions alongside estimated debt-to-income (DTI) metrics.
+- Review demographic approval rates prior to considering automated decision support.
 
-| Measure | Result |
-| :--- | :--- |
-| 5-fold cross-validation accuracy | **74.7% ± 5.1%** |
-| Improvement over majority-class baseline | **+6.0 percentage points** |
-| Holdout test accuracy | **81.3%** (100/123) |
-| Approval precision | **87.8%** |
-| Approval recall | **84.7%** (correctly identified 72 of 85 approved cases) |
-| ROC-AUC | **0.85** |
-| Historical female/male approval-rate ratio | **0.966** |
-
-> **Scope & Limitations:** This is an educational prototype trained on 614 records from a public Kaggle dataset. The reported results demonstrate pipeline construction and baseline predictive lift. They should not be interpreted as evidence that this model is ready for production lending decisions or fully audited for systemic fairness.
+> **Scope & Limitations:** This is an educational prototype trained on 614 records from a public Kaggle dataset. It is designed to assist human review, not serve as an autonomous credit-scoring system.
 
 ---
 
-## 🛠️ Architecture & Pipeline
+## 📊 Results Summary
 
-- **Model validation:** Missing-value imputation is inside the Scikit-learn `Pipeline`, so the imputer is fitted separately within each training fold to prevent data leakage. The model uses a stratified 80/20 train-test split with a fixed random seed.
-- **Model:** Random Forest Classifier (`n_estimators=120`, `max_depth=5`, `class_weight='balanced'`).
-- **Feature Engineering:** `Total_Income`, `EMI_Estimate`, and `Debt_To_Income` are computed from raw applicant parameters prior to the train/test split.
+| Metric | Score | Context / Interpretation |
+| :--- | :--- | :--- |
+| **5-Fold CV Accuracy** | **74.7% ± 5.1%** | Generalized baseline across validation folds |
+| **Majority-Class Baseline** | **68.7%** | Naive "always approve" strategy |
+| **Net Improvement** | **+6.0 percentage points** | Empirical model lift over naive baseline |
+| **Holdout Test Accuracy** | **81.3%** | Evaluated on 123 unseen test records |
+| **Precision (Approval Class)**| **87.8%** | 72 of 82 predicted approvals were correct |
+| **Recall (Sensitivity)** | **84.7%** | Correctly identified 72 of 85 approved applicants |
+| **ROC-AUC Score** | **0.85** | Strong class separability on test cohort |
+| **Disparate Impact Ratio** | **0.966** | Historical female/male approval-rate ratio |
 
 ---
 
-## ⚖️ Fairness Check (UN SDG 10)
+## 🛠️ How the Model Works
 
-`Gender` is excluded from the model feature set. The application separately compares historical approval rates by gender and reports a female-to-male ratio of 0.966 for this dataset. 
+- **Leakage-Free Imputation:** Preprocessing is wrapped inside a Scikit-Learn `Pipeline` with `SimpleImputer(strategy='median')`. Imputation statistics are computed strictly within training folds to eliminate distributional leakage.
+- **Feature Engineering:** Computes total household income (`ApplicantIncome + CoapplicantIncome`), estimated monthly payments (`EMI_Estimate`), and debt-to-income (`Debt_To_Income`) prior to pipeline entry.
+- **Model Architecture:** Random Forest Classifier (`n_estimators=120`, `max_depth=5`, `class_weight='balanced'`).
+- **Primary Observed Associations:** In this dataset, applicants with a recorded credit history had an approval rate above 79%, compared to below 10% for applicants without one.
 
-*Note: This is a descriptive dataset check, not a complete fairness evaluation. A production assessment would also compare model predictions, false-positive/negative rates, sample sizes, and performance across additional protected groups.*
+---
+
+## ⚖️ Fairness & Ethical Considerations (UN SDG 10)
+
+This project addresses **UN SDG 10 (Reduced Inequalities)** by testing for demographic parity:
+- **Feature Exclusion:** `Gender` is excluded from the model feature set so decisions are driven by credit history and debt-servicing capacity.
+- **Disparate Impact Screening:** Historical records show an approval rate of 66.9% for female applicants and 69.3% for male applicants, yielding a ratio of **0.966** (satisfying the regulatory Four-Fifths screening threshold of $\ge 0.80$).
+- **Limitation:** Omission of a sensitive attribute does not guarantee complete fairness, as correlated proxy variables may still exist. A production audit would require subgroup error-rate evaluation.
 
 ---
 
