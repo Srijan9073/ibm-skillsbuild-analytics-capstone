@@ -1,6 +1,6 @@
 # Loan Approval Prediction Dashboard
 
-A Streamlit dashboard to explore loan approval patterns and test a Random Forest model on 614 applicant records.
+I built a Streamlit dashboard to explore loan approval trends and test a Random Forest model on 614 loan applications. The project looks at how applicant financial features relate to approval outcomes and helps reviewers compare predictions with key risk indicators.
 
 [![Python](https://img.shields.io/badge/Python-3.14-3776AB?style=flat-square&logo=python&logoColor=white)](#)
 [![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-1.5.0-F7931E?style=flat-square&logo=scikit-learn&logoColor=white)](#)
