@@ -2,9 +2,9 @@
 
 A Streamlit dashboard to explore loan approval patterns and test a Random Forest model on 614 applicant records.
 
-[![Python](https://img.shields.io/badge/Python-3.14-3776AB?style=flat-square&logo=python&logoColor=white)]
-[![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-1.5.0-F7931E?style=flat-square&logo=scikit-learn&logoColor=white)]
-[![Streamlit](https://img.shields.io/badge/Streamlit-1.36.0-FF4B4B?style=flat-square&logo=streamlit&logoColor=white)]
+[![Python](https://img.shields.io/badge/Python-3.14-3776AB?style=flat-square&logo=python&logoColor=white)](#)
+[![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-1.5.0-F7931E?style=flat-square&logo=scikit-learn&logoColor=white)](#)
+[![Streamlit](https://img.shields.io/badge/Streamlit-1.36.0-FF4B4B?style=flat-square&logo=streamlit&logoColor=white)](#)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
 > **Key Results at a Glance:**
