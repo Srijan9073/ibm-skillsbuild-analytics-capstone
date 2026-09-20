@@ -61,3 +61,12 @@ pip install -r requirements.txt
 
 # 3. Launch the dashboard
 streamlit run app.py
+
+---
+
+## 👨‍💻 Candidate & Submission Details
+- **Candidate:** Srijan Das
+- **Internship ID:** `IBMUEDA0483`
+- **Institution:** Cooch Behar Government Engineering College (CGEC)
+- **Program:** AICTE–BharatCares–IBM SkillsBuild Data Analytics with AI Virtual Internship
+- **LinkedIn:** [linkedin.com/in/srijandas2099](https://www.linkedin.com/in/srijandas2099/)
