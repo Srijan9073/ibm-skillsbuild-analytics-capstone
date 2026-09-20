@@ -83,7 +83,7 @@ This project looks at **UN SDG 10** by checking demographic parity:
 
 ### 1. Reproduce Validation Metrics
 ```bash
-python scripts/verify_metrics.py (or verify_metrics.py)
+python scripts/verify_metrics.py (or python verify_metrics.py)
 ```
 ### 2. Launch the Streamlit Dashboard
 ```bash
