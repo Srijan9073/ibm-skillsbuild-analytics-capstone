@@ -7,7 +7,6 @@ A Streamlit decision-support dashboard for exploring loan approval patterns and 
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.36.0-FF4B4B?style=flat-square&logo=streamlit&logoColor=white)](#)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
-
 > **Key Results at a Glance:**
 > - **81.3%** holdout accuracy on 123 test applications (100 of 123 correctly classified)
 > - **74.7% ± 5.1%** accuracy across 5-fold stratified cross-validation
@@ -70,8 +69,8 @@ This project addresses **UN SDG 10 (Reduced Inequalities)** by testing for demog
 ## 📂 Repository Layout
 
 - [`app.py`](./app.py): Streamlit application and ML pipeline.
-- [`data/train_loan_data.csv`](./data/train_loan_data.csv): Kaggle benchmark dataset.
-- **Dataset Source:** (https://www.kaggle.com/datasets/altruistdelhite04/loan-prediction-problem-dataset).
+- [`data/train_loan_data.csv`](./data/train_loan_data.csv): Benchmark dataset.
+- **Dataset Source:** [Kaggle Loan Prediction Problem Dataset](https://www.kaggle.com/datasets/altruistdelhite04/loan-prediction-problem-dataset)
 - [`scripts/verify_metrics.py`](./scripts/verify_metrics.py): Script to locally reproduce the reported validation metrics.
 - [`reports/project_report.pdf`](./reports/project_report.pdf): PDF report describing the dataset, model, and validation results.
 - [`requirements.txt`](./requirements.txt): Direct project dependencies.
@@ -82,7 +81,7 @@ This project addresses **UN SDG 10 (Reduced Inequalities)** by testing for demog
 
 ## 🚀 How to Reproduce & Run Locally
 
-1. Reproduce Validation Metrics
+### 1. Reproduce Validation Metrics
 ```bash
 python scripts/verify_metrics.py
 
