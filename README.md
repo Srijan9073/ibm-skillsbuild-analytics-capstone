@@ -65,7 +65,7 @@ This project addresses **UN SDG 10 (Reduced Inequalities)** by testing for demog
 
 - [`app.py`](./app.py): Streamlit application and ML pipeline.
 - [`data/train_loan_data.csv`](./data/train_loan_data.csv): Kaggle benchmark dataset.
-- **Dataset Source:** [Kaggle Loan Prediction Problem Dataset]([https://www.kaggle.com/datasets/altruistdelhite04/loan-prediction-problem-datase])
+- **Dataset Source:** [Kaggle Loan Prediction Problem Dataset](https://www.kaggle.com/datasets/altruistdelhite04/loan-prediction-problem-datase)
 - [`scripts/verify_metrics.py`](./scripts/verify_metrics.py): Script to locally reproduce the reported validation metrics.
 - [`reports/project_report.pdf`](./reports/project_report.pdf): PDF report describing the dataset, model, and validation results.
 - [`requirements.txt`](./requirements.txt): Direct project dependencies.
