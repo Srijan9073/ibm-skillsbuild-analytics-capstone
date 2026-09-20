@@ -7,7 +7,7 @@ from sklearn.impute import SimpleImputer
 from sklearn.metrics import accuracy_score, precision_score, recall_score, confusion_matrix, roc_auc_score
 
 # Load data
-df = pd.read_csv("train_loan_data.csv")
+df = pd.read_csv("data/train_loan_data.csv")
 df['Total_Income'] = df['ApplicantIncome'] + df['CoapplicantIncome']
 df['EMI_Estimate'] = (df['LoanAmount'] * 1000) / df['Loan_Amount_Term'].replace(0, np.nan)
 df['Debt_To_Income'] = df['EMI_Estimate'] / (df['Total_Income'] + 1e-5)
@@ -46,7 +46,7 @@ y_pred = pipeline.predict(X_test)
 y_proba = pipeline.predict_proba(X_test)[:, 1]
 
 print("=" * 45)
-print("  OFFICIAL AUDITED METRICS (LOCAL EXECUTION)")
+print("MODEL EVALUATION RESULTS")
 print("=" * 45)
 print(f"5-Fold CV Accuracy:   {cv_scores.mean()*100:.1f}% ± {cv_scores.std()*100:.1f}%")
 print(f"Holdout Test Accuracy: {accuracy_score(y_test, y_pred)*100:.1f}%")
