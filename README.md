@@ -73,17 +73,23 @@ This project addresses **UN SDG 10 (Reduced Inequalities)** by testing for demog
 
 ---
 
-## 🚀 How to Run Locally
+## 🚀 How to Reproduce & Run Locally
 
+1. Reproduce Validation Metrics
 ```bash
-# 1. Clone repository
+python scripts/verify_metrics.py
+
+```
+2. Launch the Streamlit Dashboard
+```bash
+# Clone the repository
 git clone https://github.com/Srijan9073/ibm-skillsbuild-analytics-capstone.git
 cd ibm-skillsbuild-analytics-capstone
 
-# 2. Install dependencies
+# Install dependencies
 pip install -r requirements.txt
 
-# 3. Launch the dashboard
+# Launch the dashboard
 streamlit run app.py
 
 ```
