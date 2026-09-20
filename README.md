@@ -86,7 +86,7 @@ This project looks at **UN SDG 10** by checking demographic parity:
 python scripts/verify_metrics.py
 
 ```
-2. Launch the Streamlit Dashboard
+### 2. Launch the Streamlit Dashboard
 ```bash
 # Clone the repository
 git clone https://github.com/Srijan9073/ibm-skillsbuild-analytics-capstone.git
