@@ -29,7 +29,7 @@ In lending, analysts need to grow loan approvals without increasing default risk
 - Evaluate model predictions alongside estimated debt-to-income (DTI) metrics.
 - Review demographic approval rates prior to considering automated decision support.
 
-> **Scope & Limitations:** This is an educational prototype trained on 614 records from a public Kaggle dataset. This is meant to support human review, not replace human credit decisions.
+> **Scope & Limitations:** This project is a learning prototype built on 614 records from a public Kaggle dataset. It is meant to help a human reviewer assess model output, not to make credit decisions on its own.
 
 ---
 
