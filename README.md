@@ -62,7 +62,7 @@ In lending, analysts need to grow loan approvals without increasing default risk
 This project looks at **UN SDG 10** by checking demographic parity:
 - **Feature Exclusion:** `Gender` is excluded from the model. The model uses credit history and debt-to-income capacity instead.
 - **Disparate Impact Screening:** Historical records show an approval rate of 66.9% for female applicants and 69.3% for male applicants, yielding a ratio of **0.966** (satisfying the regulatory Four-Fifths screening threshold of $\ge 0.80$).
-- **Limitation:** Omission of a sensitive attribute does not guarantee complete fairness, as correlated proxy variables may still exist. A production audit would require subgroup error-rate evaluation.
+- **Limitation:** I excluded gender from the model to avoid using a sensitive attribute directly, but that does not guarantee fairness. A real audit would still need to check whether other variables act as proxies and compare error rates across groups.
 
 ---
 
