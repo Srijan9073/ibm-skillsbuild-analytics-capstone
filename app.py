@@ -1,9 +1,9 @@
 """
-AICTE–IBM SkillsBuild Data Analytics with AI Capstone Project
-Title: Credit Risk Assessment & Automated Loan Underwriting Engine
-Author: Srijan Das (Internship ID: IBMUEDA0483)
-Affiliation: Cooch Behar Government Engineering College (CGEC)
-UN SDG Alignment: Goal 8 (Decent Work & Economic Growth) & Goal 10 (Reduced Inequalities)
+Streamlit app for the loan approval prediction project.
+
+The app loads the training data, engineers income and debt features,
+trains a Random Forest pipeline, and exposes model diagnostics and an
+interactive scoring form.
 """
 
 from typing import Tuple, Dict, Any
@@ -63,27 +63,29 @@ st.markdown("""
 # 2. DATA INGESTION & FEATURE ENGINEERING
 # -----------------------------------------------------------------------------
 @st.cache_data(show_spinner=False)
-def load_and_engineer_features(filepath: str = "train_loan_data.csv") -> Tuple[pd.DataFrame, pd.DataFrame]:
+def load_and_engineer_features(filepath: str = "data/train_loan_data.csv") -> Tuple[pd.DataFrame, pd.DataFrame]:
     try:
         raw_data = pd.read_csv(filepath)
     except FileNotFoundError:
-        raw_data = pd.read_csv("loan_data.csv")
+        # Fallback if run from the wrong directory
+        raw_data = pd.read_csv("train_loan_data.csv")
 
     df = raw_data.copy()
 
     if 'Loan_ID' in df.columns:
         df.drop(columns=['Loan_ID'], inplace=True)
 
-    # Domain-Driven Feature Engineering (Computed prior to downstream imputation)
+    # Add income and debt features before model training.
     df['Total_Income'] = df['ApplicantIncome'] + df['CoapplicantIncome']
     df['EMI_Estimate'] = (df['LoanAmount'] * 1000) / df['Loan_Amount_Term'].replace(0, np.nan)
     df['Debt_To_Income'] = df['EMI_Estimate'] / (df['Total_Income'] + 1e-5)
 
-    # Encode categorical columns
+    # Categorical Encoding
     encoded_df = df.copy()
     encoding_map = {
         'Married': {'Yes': 1, 'No': 0},
         'Education': {'Graduate': 1, 'Not Graduate': 0},
+        'Self_Employed': {'Yes': 1, 'No': 0},
         'Property_Area': {'Rural': 0, 'Semiurban': 1, 'Urban': 2},
         'Loan_Status': {'Y': 1, 'N': 0}
     }
@@ -112,16 +114,17 @@ FEATURE_COLUMNS = [
 
 @st.cache_resource(show_spinner=False)
 def train_leakage_free_model(data: pd.DataFrame) -> Dict[str, Any]:
+    # Drop rows where target is NaN
     valid_data = data.dropna(subset=['Loan_Status']).copy()
     X = valid_data[FEATURE_COLUMNS]
     y = valid_data['Loan_Status'].astype(int)
 
-    # Stratified Train/Test Split BEFORE any imputation to eliminate data leakage
+    # Split before fitting the preprocessing pipeline.
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.20, random_state=42, stratify=y
     )
 
-    # Integrated Scikit-Learn Pipeline: Imputer fits strictly on X_train
+    # Keep imputation inside the pipeline so it is fitted on training data only.
     pipeline = Pipeline([
         ('imputer', SimpleImputer(strategy='median')),
         ('classifier', RandomForestClassifier(
@@ -133,11 +136,11 @@ def train_leakage_free_model(data: pd.DataFrame) -> Dict[str, Any]:
         ))
     ])
 
-    # 5-Fold Stratified Cross-Validation for generalizable stability
+    # Estimate validation accuracy using five stratified folds.
     cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
     cv_scores = cross_val_score(pipeline, X_train, y_train, cv=cv, scoring='accuracy')
 
-    # Fit pipeline
+    # Fit pipeline on training cohort
     pipeline.fit(X_train, y_train)
 
     y_pred = pipeline.predict(X_test)
@@ -183,14 +186,13 @@ with st.sidebar:
     st.caption("**Candidate:** Srijan Das")
     st.caption("**Internship ID:** `IBMUEDA0483`")
     st.caption("**Institution:** CGEC (CSE)")
-    st.caption("**UN SDG Impact:** Goal 8 & Goal 10")
 
 # -----------------------------------------------------------------------------
 # 5. MODULE 1: EXECUTIVE OVERVIEW
 # -----------------------------------------------------------------------------
 if nav == "1. Executive Overview & Data Health":
     st.title("🏦 Credit Risk Assessment & Automated Loan Underwriting Engine")
-    st.markdown("#### Strategic Business Intelligence & Risk Mitigation Dashboard")
+    st.markdown("#### Dataset summary and model inputs")
     st.write("---")
 
     c1, c2, c3, c4 = st.columns(4)
@@ -225,17 +227,17 @@ if nav == "1. Executive Overview & Data Health":
         </div>
         """, unsafe_allow_html=True)
 
-    st.subheader("Audited Ingestion Sample")
+    st.subheader("Sample of loaded records")
     st.dataframe(cleaned_df.head(6), use_container_width=True)
 
-    with st.expander("Parametric Descriptive Statistics", expanded=True):
+    with st.expander("Descriptive statistics", expanded=True):
         st.dataframe(cleaned_df.describe().T, use_container_width=True)
 
 # -----------------------------------------------------------------------------
 # 6. MODULE 2: EXPLORATORY DATA ANALYSIS (EDA)
 # -----------------------------------------------------------------------------
 elif nav == "2. Exploratory Data Analysis (EDA)":
-    st.title("📈 Statistical Insights & Risk Driver Discovery")
+    st.title("📈 Exploratory analysis")
     st.markdown("Evaluating demographic and financial relationships governing loan approval outcomes.")
     st.write("---")
 
@@ -294,26 +296,28 @@ elif nav == "2. Exploratory Data Analysis (EDA)":
 # 7. MODULE 3: MODEL DIAGNOSTICS & EVALUATION
 # -----------------------------------------------------------------------------
 elif nav == "3. Model Architecture & Diagnostics":
-    st.title("🤖 Predictive Model Benchmarks & Validation")
+    st.title("🤖 Model evaluation")
     st.markdown("Ensemble Random Forest Classifier with automated `SimpleImputer` preprocessing.")
     st.write("---")
 
     m1, m2, m3, m4 = st.columns(4)
     m1.metric("Test Accuracy", f"{model_artifacts['accuracy']*100:.1f}%")
-    # Delta prevents string overflow/ellipsis in narrow columns
+    
+    # Delta used to prevent Streamlit ellipsis truncation on narrow columns
     m2.metric(
         "5-Fold CV Accuracy", 
         f"{model_artifacts['cv_mean']*100:.1f}%", 
         delta=f"±{model_artifacts['cv_std']*100:.1f}% (CV Std)", 
         delta_color="off"
     )
+    
     m3.metric("Recall (Sensitivity)", f"{model_artifacts['recall']*100:.1f}%")
     m4.metric("ROC-AUC Score", f"{model_artifacts['roc_auc']:.2f}")
 
     col_diag_left, col_diag_right = st.columns(2)
 
     with col_diag_left:
-        st.markdown("##### Confusion Matrix (Validation Cohort, n=123)")
+        st.markdown("##### Confusion Matrix (Validation Cohort)")
         fig_cm, ax_cm = plt.subplots(figsize=(5, 3.8), dpi=150)
         sns.heatmap(
             model_artifacts['conf_matrix'],
@@ -329,7 +333,7 @@ elif nav == "3. Model Architecture & Diagnostics":
         st.pyplot(fig_cm)
 
     with col_diag_right:
-        st.markdown("##### Gini Feature Importance Ranking (All Features)")
+        st.markdown("##### Gini Feature Importance Ranking")
         fig_fi, ax_fi = plt.subplots(figsize=(5, 3.8), dpi=150)
         model_artifacts['importances'].plot(kind='barh', color="#1976D2", ax=ax_fi)
         ax_fi.invert_yaxis()
@@ -342,7 +346,7 @@ elif nav == "3. Model Architecture & Diagnostics":
 # -----------------------------------------------------------------------------
 elif nav == "4. Automated Underwriting Simulator":
     st.title("🔍 Automated Credit Risk Underwriting Interface")
-    st.markdown("Live scoring engine utilizing the trained end-to-end pipeline.")
+    st.markdown("Enter applicant details to generate a model prediction.")
     st.write("---")
 
     with st.form("underwriting_simulation_form"):
@@ -376,7 +380,6 @@ elif nav == "4. Automated Underwriting Simulator":
         calculated_emi = (loan_amount_k * 1000) / term_months
         calculated_dti = calculated_emi / (combined_income + 1e-5)
 
-        # Build payload matching FEATURE_COLUMNS order
         inference_payload = pd.DataFrame([{
             'Credit_History': credit_history_flag,
             'Total_Income': combined_income,
@@ -397,7 +400,7 @@ elif nav == "4. Automated Underwriting Simulator":
             st.success(f"""
             #### ✅ APPLICATION APPROVED: LOW RISK PROFILE
             - **Approval Confidence:** `{prediction_probabilities[1]*100:.1f}%`
-            - **Estimated DTI Ratio:** `{calculated_dti*100:.2f}%` (Debt service capacity verified)
+            - **Estimated DTI Ratio:** `{calculated_dti*100:.2f}%`
             - **Total Servicing Income:** `₹{combined_income:,}/month`
             - **Straight-Through Processing:** Qualifies for automated clearance under standard rate schedule.
             """)
@@ -415,7 +418,7 @@ elif nav == "4. Automated Underwriting Simulator":
 # -------------------------------------------------------------
 elif nav == "5. Algorithmic Fairness & UN SDG 10":
     st.title("⚖️ Algorithmic Fairness & Ethical AI Audit")
-    st.markdown("Addressing **UN SDG 10 (Reduced Inequalities)** through demographic parity checks.")
+    st.markdown("Descriptive comparison of historical approval rates by gender.")
     st.write("---")
 
     st.markdown("""
@@ -423,6 +426,7 @@ elif nav == "5. Algorithmic Fairness & UN SDG 10":
     To prevent disparate impact and comply with fair lending standards, **`Gender` is intentionally omitted from the model's feature set**.
     """)
 
+    # Demographic Parity Evaluation
     gender_approval = cleaned_df.groupby('Gender')['Loan_Status'].apply(lambda s: (s == 'Y').mean() * 100)
 
     f_col1, f_col2 = st.columns(2)
@@ -430,14 +434,13 @@ elif nav == "5. Algorithmic Fairness & UN SDG 10":
         st.markdown("##### Historical Approval Rate by Gender")
         st.dataframe(gender_approval.rename("Approval Rate (%)"))
         disparate_impact = gender_approval.get('Female', 0) / (gender_approval.get('Male', 1) + 1e-5)
-        st.metric("Disparate Impact Ratio (Female / Male)", f"{disparate_impact:.3f}")
+        st.metric("Historical Approval-Rate Ratio (Female / Male)", f"{disparate_impact:.3f}")
         st.caption("Ratio $\ge 0.80$ meets the Four-Fifths Rule for non-discrimination.")
 
     with f_col2:
         st.markdown("##### Governance Policy")
         st.info("""
         - **Objective:** Mitigate demographic bias in credit scoring.
-        - **Implementation:** Financial capacity features (`Total_Income`, `EMI_Estimate`, `Debt_To_Income`) replace protected personal attributes.
-        - **Audit Result:** The model bases decisions on debt service capacity and credit history, satisfying UN SDG 10.
+        - **Implementation:** `Gender` is excluded from the model feature set. 
+        - **Result:** The displayed ratio compares historical approval rates and should not be interpreted as absolute proof of algorithmic fairness in production.
         """)
-        
