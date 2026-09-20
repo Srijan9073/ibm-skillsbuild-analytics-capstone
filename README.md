@@ -1,56 +1,57 @@
-# Credit Risk Assessment & Automated Loan Underwriting Engine
+# Credit Risk Assessment & Loan Approval Prediction
 
-An end-to-end data analytics and predictive underwriting decision engine developed for the **AICTE–IBM SkillsBuild Data Analytics with AI Virtual Internship (2026)**.
+![Streamlit dashboard screenshot](reports/dashboard-screenshot.png)
 
-[![Internship ID](https://img.shields.io/badge/Internship_ID-IBMUEDA0483-blue?style=flat-square)](#)
-[![Python](https://img.shields.io/badge/Python-3.14-3776AB?style=flat-square&logo=python&logoColor=white)](#)
-[![Streamlit](https://img.shields.io/badge/App-Streamlit-FF4B4B?style=flat-square&logo=streamlit&logoColor=white)](#)
-[![UN SDG](https://img.shields.io/badge/UN_SDG-Goal_8_&_10-4C9F38?style=flat-square)](#)
+A Streamlit prototype that predicts loan approval using applicant income, loan details, credit history, education, marital status, and property area.
 
----
+Built as the final project for the **AICTE–IBM SkillsBuild Data Analytics with AI Virtual Internship (2026)**.
 
-## 📌 Summary
-Traditional retail credit underwriting relies on manual reviews that introduce latency, human inconsistency, and high rejection rates for unbanked borrowers. This project delivers an automated, audit-cleared credit scoring pipeline that balances credit portfolio expansion against Non-Performing Asset (NPA) risk.
+## 📊 Results at a Glance
 
-### 🌐 UN Sustainable Development Goals (UN SDGs) Alignment
-- **UN SDG 8 (Decent Work & Economic Growth):** Eliminates underwriting backlogs to accelerate capital access for micro-enterprises and families.
-- **UN SDG 10 (Reduced Inequalities via Algorithmic Fairness):** Employs objective financial capacity metrics while omitting protected demographic attributes (`Gender`). An empirical fairness audit confirmed a **Disparate Impact Ratio of 0.966**, fully complying with the regulatory Four-Fifths Rule.
+| Measure | Result |
+| :--- | :--- |
+| 5-fold cross-validation accuracy | **74.7% ± 5.1%** |
+| Improvement over majority-class baseline | **+6.0 percentage points** |
+| Holdout test accuracy | **81.3%** (100/123) |
+| Approval precision | **87.8%** |
+| Approval recall | **84.7%** (correctly identified 72 of 85 approved cases) |
+| ROC-AUC | **0.85** |
+| Historical female/male approval-rate ratio | **0.966** |
 
----
-
-## 📊 Dataset Reference
-- **Source:** [Kaggle - Loan Prediction Problem Dataset](https://www.kaggle.com/datasets/altruistdelhite04/loan-prediction-problem-dataset)
-- **Observations:** 614 credit applicant records with 12 demographic and financial parameters.
-- **Target Variable:** `Loan_Status` (Binary: Approved `Y` / Rejected `N`).
+> **Scope & Limitations:** This is an educational prototype trained on 614 records from a public Kaggle dataset. The reported results demonstrate pipeline construction and baseline predictive lift. They should not be interpreted as evidence that this model is ready for production lending decisions or fully audited for systemic fairness.
 
 ---
 
-## 🛠️ Architecture & Empirical Benchmarks
-- **Data Engineering:** Integrated domain indicators (`Total_Income`, `EMI_Estimate`, `Debt_To_Income`).
-- **Leakage-Free Pipeline:** Preprocessing and `SimpleImputer(strategy='median')` are wrapped in a Scikit-Learn `Pipeline` fitted strictly on training folds.
-- **Model:** Regularized ensemble Random Forest Classifier (120 estimators, max depth = 5, balanced class weights).
+## 🛠️ Architecture & Pipeline
 
-### 📈 Verified Performance Metrics (Tested on Python 3.14)
-- **5-Fold Stratified Cross-Validation:** **74.7% ± 5.1%** (+6.0% lift over 68.7% naive baseline)
-- **Holdout Validation Accuracy:** **81.3%** (100 / 123)
-- **Precision (Approval Class):** **87.8%** (72 / 82)
-- **Recall (Sensitivity):** **84.7%** (72 / 85, minimizing false rejections)
-- **ROC-AUC Score:** **0.85**
-- **Disparate Impact Ratio:** **0.966** (No demographic bias)
+- **Model validation:** Missing-value imputation is inside the Scikit-learn `Pipeline`, so the imputer is fitted separately within each training fold to prevent data leakage. The model uses a stratified 80/20 train-test split with a fixed random seed.
+- **Model:** Random Forest Classifier (`n_estimators=120`, `max_depth=5`, `class_weight='balanced'`).
+- **Feature Engineering:** `Total_Income`, `EMI_Estimate`, and `Debt_To_Income` are computed from raw applicant parameters prior to the train/test split.
 
 ---
 
-## 📂 Repository Contents
-- [`app.py`](./app.py): Single-file leakage-free pipeline and interactive Streamlit underwriting simulator.
-- [`project_report.pdf`](./project_report.pdf): 5-page publication-grade LaTeX report with all 7 UI figures.
-- [`train_loan_data.csv`](./train_loan_data.csv): Source benchmark dataset.
-- [`requirements.txt`](./requirements.txt) & [`lockfile.txt`](./lockfile.txt): Pinned, project-scoped environment dependencies.
-- [`output.txt`](./output.txt): Raw execution log from `verify_metrics.py`.
-- [`runtime.txt`](./runtime.txt): Specified Python 3.14 runtime.
+## ⚖️ Fairness Check (UN SDG 10)
+
+`Gender` is excluded from the model feature set. The application separately compares historical approval rates by gender and reports a female-to-male ratio of 0.966 for this dataset. 
+
+*Note: This is a descriptive dataset check, not a complete fairness evaluation. A production assessment would also compare model predictions, false-positive/negative rates, sample sizes, and performance across additional protected groups.*
+
+---
+
+## 📂 Repository Layout
+
+- [`app.py`](./app.py): Streamlit application and ML pipeline.
+- [`data/train_loan_data.csv`](./data/train_loan_data.csv): Kaggle benchmark dataset.
+- [`scripts/verify_metrics.py`](./scripts/verify_metrics.py): Script to locally reproduce the reported validation metrics.
+- [`reports/project_report.pdf`](./reports/project_report.pdf): PDF report describing the dataset, model, and validation results.
+- [`requirements.txt`](./requirements.txt): Direct project dependencies.
+- [`requirements.lock`](./requirements.lock): Full environment freeze used for the reported run.
+- [`runtime.txt`](./runtime.txt): Python runtime used for development (Python 3.14).
 
 ---
 
 ## 🚀 How to Run Locally
+
 ```bash
 # 1. Clone repository
 git clone https://github.com/Srijan9073/ibm-skillsbuild-analytics-capstone.git
